@@ -1,9 +1,11 @@
-import './App.scss';
+import "./App.scss";
+import Header from "./components/Header";
 
 function App() {
   return (
     <div className="App">
-      backend URL : {process.env.REACT_APP_BACKEND_API_URL}
+      <Header />
+      <div className="content"></div>
     </div>
   );
 }
