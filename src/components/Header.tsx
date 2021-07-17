@@ -1,6 +1,15 @@
 import "./Header.scss";
 
-const Header = () => (
+export type HeaderProps = {
+  title: string;
+  content: string;
+  image: {
+    src: string;
+    alt?: string;
+  };
+};
+
+const Header = ({ title, content, image: { src, alt } }: HeaderProps) => (
   <div className="header">
     <div className="top-bar">
       <svg
@@ -18,17 +27,10 @@ const Header = () => (
     </div>
     <div className="restaurant-info">
       <div>
-        <h1>Title</h1>
-        <p>
-          Consequat cillum enim Lorem dolor et sint sunt in cillum cupidatat.
-          Fugiat quis deserunt laborum sint consectetur ullamco officia. Minim
-          ea pariatur commodo sit eiusmod veniam sit aliqua cupidatat incididunt
-        </p>
+        <h1>{title}</h1>
+        <p>{content}</p>
       </div>
-      <img
-        alt=""
-        src="https://f.roocdn.com/images/menus/17697/header-image.jpg"
-      />
+      <img alt={alt} src={src} />
     </div>
   </div>
 );
