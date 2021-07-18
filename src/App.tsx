@@ -71,7 +71,18 @@ function App() {
             <MenuCategory key={index} {...menuCategory} />
           ))}
         </div>
-        <Cart />
+        <Cart
+          menuItems={[
+            { id: "a", name: "Granola parfait bio", price: 6.6, quantity: 2 },
+            {
+              id: "b",
+              name: "Crunola parfait bio (100% végétalien)",
+              price: 6.6,
+              quantity: 3,
+            },
+          ]}
+          balance={{ subTotal: 13.2, fee: 2.5, total: 15.7 }}
+        />
       </div>
     </div>
   );
