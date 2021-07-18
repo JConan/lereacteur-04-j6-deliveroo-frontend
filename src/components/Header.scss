@@ -1,6 +1,6 @@
 @import "../variables";
 
-.header {
+.App .header {
   width: 100%;
   background-color: #fff;
 
@@ -24,10 +24,16 @@
     display: flex;
     justify-content: space-between;
 
+    h1 {
+      font-size: 2rem;
+      margin-top: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
     div {
       width: 820px;
       p {
-        font-size: 19px;
+        font-size: 1.2rem;
         color: #868a8a;
         line-height: 1.5;
       }

@@ -1,9 +1,31 @@
+@import "variables.scss";
 .App {
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   justify-content: center;
 
   .content {
-    background-color: gray;
+    width: $width;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+
+    .menu {
+      width: 820px;
+
+      h2 {
+        flex: 0 0 100%;
+      }
+    }
+
+    .cart {
+      position: sticky;
+      top: 0;
+      width: 350px;
+      height: 200px;
+      background: lightgreen;
+    }
   }
 }
