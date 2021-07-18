@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./App.scss";
+import Cart from "./components/Cart";
 import Header, { HeaderProps } from "./components/Header";
 import MenuCategory, { MenuCategoryProps } from "./components/MenuCategory";
 
@@ -44,7 +45,7 @@ function App() {
         },
       });
 
-      const onItemClick = setMenuCategories(
+      setMenuCategories(
         response.data.categories.map((category) => ({
           name: category.name,
           items: category.meals.map((meal) => ({
@@ -70,7 +71,7 @@ function App() {
             <MenuCategory key={index} {...menuCategory} />
           ))}
         </div>
-        <div className="cart"></div>
+        <Cart />
       </div>
     </div>
   );
