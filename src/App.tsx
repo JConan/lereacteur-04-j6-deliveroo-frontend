@@ -44,7 +44,7 @@ function App() {
         },
       });
 
-      setMenuCategories(
+      const onItemClick = setMenuCategories(
         response.data.categories.map((category) => ({
           name: category.name,
           items: category.meals.map((meal) => ({
@@ -55,6 +55,7 @@ function App() {
             isPopular: meal.popular,
             pictureUrl: meal.picture,
           })),
+          onItemClick: (itemId: string) => console.log(itemId),
         }))
       );
     })();

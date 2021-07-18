@@ -10,14 +10,19 @@ export type MenuCategoryProps = {
     isPopular?: boolean;
     pictureUrl?: string;
   }>;
+  onItemClick?: (itemId: string) => void;
 };
 
-const MenuCategory = ({ name, items }: MenuCategoryProps) =>
+const MenuCategory = ({ name, items, onItemClick }: MenuCategoryProps) =>
   items.length > 0 ? (
     <div className="menuCategory">
       <h2>{name}</h2>
       {items.map((item, index) => (
-        <div key={index} className="menuItem">
+        <div
+          key={index}
+          className="menuItem"
+          onClick={() => onItemClick && onItemClick(item.id)}
+        >
           <div>
             <h3>{item.name}</h3>
             {item.description && <p>{item.description}</p>}
