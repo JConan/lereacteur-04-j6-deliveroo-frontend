@@ -1,21 +1,19 @@
 import "./Cart.scss";
+import { ReactComponent as MinusButton } from "../assets/images/minus.svg";
+import { ReactComponent as PlusButton } from "../assets/images/plus.svg";
 
 export type CartProps = {
-  menuItems: CartMenuItems;
-  balance: CartBalance;
-};
-
-export type CartMenuItems = Array<{
-  id: string;
-  name: string;
-  quantity: number;
-  price: number;
-}>;
-
-export type CartBalance = {
-  subTotal: number;
-  fee: number;
-  total: number;
+  menuItems: Array<{
+    id: string;
+    name: string;
+    quantity: number;
+    price: number;
+  }>;
+  balance: {
+    subTotal: number;
+    fee: number;
+    total: number;
+  };
 };
 
 const Cart = ({ menuItems, balance }: CartProps) =>
@@ -26,46 +24,11 @@ const Cart = ({ menuItems, balance }: CartProps) =>
         {menuItems.map((menuItem) => (
           <div key={menuItem.id} className="cartItem">
             <span>
-              <svg
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  cursor: "pointer",
-                  color: "rgb(0, 206, 189)",
-                }}
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="8" y1="12" x2="16" y2="12"></line>
-              </svg>
+              <MinusButton />
             </span>
             <span>{menuItem.quantity}</span>
             <span>
-              <svg
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  cursor: "pointer",
-                  color: "rgb(0, 206, 189)",
-                }}
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="16"></line>
-                <line x1="8" y1="12" x2="16" y2="12"></line>
-              </svg>
+              <PlusButton />
             </span>
             <span>{menuItem.name}</span>
             <span>{`${menuItem.price.toFixed(2)} €`}</span>

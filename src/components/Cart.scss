@@ -40,6 +40,13 @@
         justify-content: space-between;
         padding: 1rem 0;
 
+        svg {
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+          color: rgb(0, 206, 189);
+        }
+
         > span {
           flex: 1 0 1rem;
           text-align: center;
