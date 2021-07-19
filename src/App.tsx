@@ -164,6 +164,15 @@ function App() {
           }}
         />
       </div>
+      <div className="footer">
+        <div>
+          Made by Johan CHAN with ReactJs
+          <a href="https://www.lereacteur.io/">@LeReacteur</a>
+          <a href="https://github.com/JConan/lereacteur-exo-react_deliveroo-frontend">
+            Github
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
