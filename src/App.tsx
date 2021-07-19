@@ -1,36 +1,20 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { getRestaurantMenu } from "./api/backend";
 import "./App.scss";
 import Cart, { CartProps } from "./components/Cart";
-import Header, { HeaderProps } from "./components/Header";
+import Header, { useHeaderState } from "./components/Header";
 import MenuCategory, {
   MenuCategoryProps,
   MenuItem,
 } from "./components/MenuCategory";
 
-type ApiResponse = {
-  restaurant: {
-    name: string;
-    description: string;
-    picture: string;
-  };
-  categories: Array<{
-    name: string;
-    meals: Array<{
-      id: string;
-      title: string;
-      description: string;
-      price: string;
-      picture?: string;
-      popular?: boolean;
-    }>;
-  }>;
-};
-
 function App() {
   const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
 
-  const [header, setHeader] = useState<HeaderProps | undefined>(undefined);
+  //const [header, setHeader] = useState<HeaderProps | undefined>(undefined);
+  const { header, setHeaderWithApiResponse } = useHeaderState();
+
   const [menuCategories, setMenuCategories] = useState<
     Array<MenuCategoryProps> | undefined
   >(undefined);
@@ -90,21 +74,11 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get<ApiResponse>(
-        process.env.REACT_APP_BACKEND_API_URL
-      );
-
-      setHeader({
-        title: response.data.restaurant.name,
-        content: response.data.restaurant.description,
-        image: {
-          src: response.data.restaurant.picture,
-          alt: `restaurant : ${response.data.restaurant.name}`,
-        },
-      });
+      const response = await getRestaurantMenu();
+      setHeaderWithApiResponse(response);
 
       setMenuCategories(
-        response.data.categories.map((category) => ({
+        response.categories.map((category) => ({
           name: category.name,
           items: category.meals.map((meal) => ({
             id: meal.id,
@@ -118,16 +92,8 @@ function App() {
       );
 
       setCart({
-        menuItems: [
-          { id: "a", name: "Granola parfait bio", price: 6.6, quantity: 2 },
-          {
-            id: "b",
-            name: "Crunola parfait bio (100% végétalien)",
-            price: 6.6,
-            quantity: 3,
-          },
-        ],
-        balance: { subTotal: 13.2, fee: 2.5, total: 15.7 },
+        menuItems: [],
+        balance: { subTotal: 0, fee: 2.5, total: 0 },
       });
     })();
   }, []);

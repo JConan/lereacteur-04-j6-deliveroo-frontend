@@ -15,6 +15,10 @@ export type MenuItem = {
   pictureUrl?: string;
 };
 
+export const useMenuStore = () => {
+  return {};
+};
+
 const MenuCategory = ({ name, items, onItemClick }: MenuCategoryProps) =>
   items.length > 0 ? (
     <div className="menuCategory">
