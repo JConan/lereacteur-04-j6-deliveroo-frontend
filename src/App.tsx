@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./App.scss";
-import Cart from "./components/Cart";
+import Cart, { CartProps } from "./components/Cart";
 import Header, { HeaderProps } from "./components/Header";
-import MenuCategory, { MenuCategoryProps } from "./components/MenuCategory";
+import MenuCategory, {
+  MenuCategoryProps,
+  MenuItem,
+} from "./components/MenuCategory";
 
 type ApiResponse = {
   restaurant: {
@@ -25,10 +28,71 @@ type ApiResponse = {
 };
 
 function App() {
+  const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([
+    "1519055545-92",
+    "1519055545-92",
+    "1519055545-93",
+    "1519055545-93",
+    "1519055545-93",
+  ]);
+
   const [header, setHeader] = useState<HeaderProps | undefined>(undefined);
   const [menuCategories, setMenuCategories] = useState<
     Array<MenuCategoryProps> | undefined
   >(undefined);
+
+  const [cart, setCart] = useState<CartProps>({
+    menuItems: [],
+    balance: {
+      subTotal: 0,
+      fee: 2.5,
+      total: 2.5,
+    },
+  });
+  useEffect(() => {
+    const menuCatalogue =
+      menuCategories
+        ?.map((menuCategory) => menuCategory.items)
+        .flatMap((items) => items) || [];
+
+    const cartState: CartProps = menuSelectedItems
+      .map((menuId) => menuCatalogue.find((menuItem) => menuItem.id === menuId))
+      .filter((item) => item !== undefined)
+      .map((item) => item as MenuItem)
+      .reduce<CartProps>(
+        (store, currentMenuItem) => {
+          const currentItem = store.menuItems.find(
+            (menuItem) => menuItem.id === currentMenuItem.id
+          );
+
+          if (currentItem) {
+            currentItem.quantity++;
+          } else {
+            store.menuItems.push({
+              id: currentMenuItem.id,
+              name: currentMenuItem.name,
+              price: currentMenuItem.price,
+              quantity: 1,
+            });
+          }
+
+          return {
+            menuItems: store.menuItems,
+            balance: {
+              ...store.balance,
+              subTotal: store.balance.subTotal + (currentMenuItem?.price || 0),
+              total: store.balance.total + (currentMenuItem?.price || 0),
+            },
+          };
+        },
+        {
+          menuItems: [],
+          balance: { subTotal: 0, total: 2.5, fee: 2.5 },
+        } as CartProps
+      );
+
+    setCart(cartState);
+  }, [menuSelectedItems, menuCategories]);
 
   useEffect(() => {
     (async () => {
@@ -56,11 +120,32 @@ function App() {
             isPopular: meal.popular,
             pictureUrl: meal.picture,
           })),
-          onItemClick: (itemId: string) => console.log(itemId),
         }))
       );
+
+      setCart({
+        menuItems: [
+          { id: "a", name: "Granola parfait bio", price: 6.6, quantity: 2 },
+          {
+            id: "b",
+            name: "Crunola parfait bio (100% végétalien)",
+            price: 6.6,
+            quantity: 3,
+          },
+        ],
+        balance: { subTotal: 13.2, fee: 2.5, total: 15.7 },
+      });
     })();
   }, []);
+
+  const addMenuItem = (id: string) => {
+    if (menuSelectedItems.indexOf(id) >= 0) {
+      menuSelectedItems.splice(menuSelectedItems.indexOf(id), 0, id);
+      setMenuSelectedItems([...menuSelectedItems]);
+    } else {
+      setMenuSelectedItems([...menuSelectedItems, id]);
+    }
+  };
 
   return (
     <div className="App">
@@ -68,20 +153,21 @@ function App() {
       <div className="content">
         <div className="menu">
           {menuCategories?.map((menuCategory, index) => (
-            <MenuCategory key={index} {...menuCategory} />
+            <MenuCategory
+              key={index}
+              {...menuCategory}
+              onItemClick={addMenuItem}
+            />
           ))}
         </div>
         <Cart
-          menuItems={[
-            { id: "a", name: "Granola parfait bio", price: 6.6, quantity: 2 },
-            {
-              id: "b",
-              name: "Crunola parfait bio (100% végétalien)",
-              price: 6.6,
-              quantity: 3,
-            },
-          ]}
-          balance={{ subTotal: 13.2, fee: 2.5, total: 15.7 }}
+          {...cart}
+          onAddMenuItem={addMenuItem}
+          onRemoveMenuItem={(id: string) => {
+            const index = menuSelectedItems.indexOf(id);
+            menuSelectedItems.splice(index, 1);
+            setMenuSelectedItems([...menuSelectedItems]);
+          }}
         />
       </div>
     </div>

@@ -16,7 +16,17 @@ export type CartProps = {
   };
 };
 
-const Cart = ({ menuItems, balance }: CartProps) =>
+export type CartHandlers = {
+  onAddMenuItem: (id: string) => void;
+  onRemoveMenuItem: (id: string) => void;
+};
+
+const Cart = ({
+  menuItems,
+  balance,
+  onAddMenuItem,
+  onRemoveMenuItem,
+}: CartProps & CartHandlers) =>
   menuItems.length > 0 ? (
     <div className="cart">
       <button>Valider mon panier</button>
@@ -24,11 +34,11 @@ const Cart = ({ menuItems, balance }: CartProps) =>
         {menuItems.map((menuItem) => (
           <div key={menuItem.id} className="cartItem">
             <span>
-              <MinusButton />
+              <MinusButton onClick={() => onRemoveMenuItem(menuItem.id)} />
             </span>
             <span>{menuItem.quantity}</span>
             <span>
-              <PlusButton />
+              <PlusButton onClick={() => onAddMenuItem(menuItem.id)} />
             </span>
             <span>{menuItem.name}</span>
             <span>{`${menuItem.price.toFixed(2)} €`}</span>

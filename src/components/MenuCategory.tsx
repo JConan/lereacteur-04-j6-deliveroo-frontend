@@ -2,15 +2,17 @@ import "./MenuCategory.scss";
 
 export type MenuCategoryProps = {
   name: string;
-  items: Array<{
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    isPopular?: boolean;
-    pictureUrl?: string;
-  }>;
+  items: Array<MenuItem>;
   onItemClick?: (itemId: string) => void;
+};
+
+export type MenuItem = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  isPopular?: boolean;
+  pictureUrl?: string;
 };
 
 const MenuCategory = ({ name, items, onItemClick }: MenuCategoryProps) =>
