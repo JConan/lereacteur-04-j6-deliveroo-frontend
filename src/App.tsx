@@ -3,16 +3,16 @@ import { getRestaurantMenu } from "./api/backend";
 import "./App.scss";
 import Cart, { CartProps } from "./components/Cart";
 import Header, { useHeaderState } from "./components/Header";
-import MenuCategory, {
+import MenuCategories, {
   MenuItem,
-  useMenuCategoryState,
-} from "./components/MenuCategory";
+  useMenuCategoriesState,
+} from "./components/MenuCategories";
 
 function App() {
   const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
 
   const { header, setHeader } = useHeaderState();
-  const { menuCategories, setMenuCategories } = useMenuCategoryState();
+  const { menuCategories, setMenuCategories } = useMenuCategoriesState();
 
   const [cart, setCart] = useState<CartProps>({
     menuItems: [],
@@ -92,7 +92,7 @@ function App() {
       <div className="content">
         <div className="menu">
           {menuCategories?.map((menuCategory, index) => (
-            <MenuCategory
+            <MenuCategories
               key={index}
               {...menuCategory}
               onItemClick={addMenuItem}
