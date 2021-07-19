@@ -1,6 +1,6 @@
 import "./Header.scss";
 import { ReactComponent as Logo } from "../assets/images/logo.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ApiResponse } from "../api/backend";
 
 export type HeaderProps = {
@@ -16,7 +16,7 @@ export const useHeaderState = () => {
   const [header, setHeader] = useState<HeaderProps | undefined>(undefined);
   return {
     header,
-    setHeaderWithApiResponse: (response: ApiResponse) => {
+    setHeader: (response: ApiResponse) => {
       setHeader({
         title: response.restaurant.name,
         content: response.restaurant.description,

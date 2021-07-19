@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { ApiResponse } from "../api/backend";
 import "./MenuCategory.scss";
 
 export type MenuCategoryProps = {
@@ -15,8 +17,29 @@ export type MenuItem = {
   pictureUrl?: string;
 };
 
-export const useMenuStore = () => {
-  return {};
+export const useMenuCategoryState = () => {
+  const [menuCategories, setMenuCategories] = useState<
+    MenuCategoryProps[] | undefined
+  >(undefined);
+
+  return {
+    menuCategories,
+    setMenuCategories: (response: ApiResponse) => {
+      setMenuCategories(
+        response.categories.map((category) => ({
+          name: category.name,
+          items: category.meals.map((meal) => ({
+            id: meal.id,
+            name: meal.title,
+            description: meal.description,
+            price: parseFloat(meal.price),
+            isPopular: meal.popular,
+            pictureUrl: meal.picture,
+          })),
+        }))
+      );
+    },
+  };
 };
 
 const MenuCategory = ({ name, items, onItemClick }: MenuCategoryProps) =>

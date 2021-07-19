@@ -1,23 +1,18 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { getRestaurantMenu } from "./api/backend";
 import "./App.scss";
 import Cart, { CartProps } from "./components/Cart";
 import Header, { useHeaderState } from "./components/Header";
 import MenuCategory, {
-  MenuCategoryProps,
   MenuItem,
+  useMenuCategoryState,
 } from "./components/MenuCategory";
 
 function App() {
   const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
 
-  //const [header, setHeader] = useState<HeaderProps | undefined>(undefined);
-  const { header, setHeaderWithApiResponse } = useHeaderState();
-
-  const [menuCategories, setMenuCategories] = useState<
-    Array<MenuCategoryProps> | undefined
-  >(undefined);
+  const { header, setHeader } = useHeaderState();
+  const { menuCategories, setMenuCategories } = useMenuCategoryState();
 
   const [cart, setCart] = useState<CartProps>({
     menuItems: [],
@@ -27,6 +22,7 @@ function App() {
       total: 2.5,
     },
   });
+
   useEffect(() => {
     const menuCatalogue =
       menuCategories
@@ -75,27 +71,10 @@ function App() {
   useEffect(() => {
     (async () => {
       const response = await getRestaurantMenu();
-      setHeaderWithApiResponse(response);
-
-      setMenuCategories(
-        response.categories.map((category) => ({
-          name: category.name,
-          items: category.meals.map((meal) => ({
-            id: meal.id,
-            name: meal.title,
-            description: meal.description,
-            price: parseFloat(meal.price),
-            isPopular: meal.popular,
-            pictureUrl: meal.picture,
-          })),
-        }))
-      );
-
-      setCart({
-        menuItems: [],
-        balance: { subTotal: 0, fee: 2.5, total: 0 },
-      });
+      setHeader(response);
+      setMenuCategories(response);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const addMenuItem = (id: string) => {
