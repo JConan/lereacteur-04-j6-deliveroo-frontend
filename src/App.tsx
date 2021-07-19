@@ -28,13 +28,7 @@ type ApiResponse = {
 };
 
 function App() {
-  const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([
-    "1519055545-92",
-    "1519055545-92",
-    "1519055545-93",
-    "1519055545-93",
-    "1519055545-93",
-  ]);
+  const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
 
   const [header, setHeader] = useState<HeaderProps | undefined>(undefined);
   const [menuCategories, setMenuCategories] = useState<
