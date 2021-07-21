@@ -1,8 +1,7 @@
 import "./Cart.scss";
 import { ReactComponent as MinusButton } from "../assets/images/minus.svg";
 import { ReactComponent as PlusButton } from "../assets/images/plus.svg";
-import { MenuCategoriesProps, MenuItem } from "./MenuCategories";
-import { useEffect, useReducer, useState } from "react";
+import { Dispatch, useEffect, useReducer, useState } from "react";
 
 export type CartProps = {
   menuItems: Array<{
@@ -23,12 +22,14 @@ export type CartHandlers = {
   onRemoveMenuItem: (id: string) => void;
 };
 
-type CartAction =
-  | { type: "addItem"; itemId: string }
-  | { type: "removeItem"; itemId: string };
+export type CartAction =
+  | { type: "addItem"; item: { id: string; name: string; price: number } }
+  | { type: "removeItem"; item: { id: string } };
 
 interface CartItem {
   id: string;
+  name: string;
+  price: number;
   quantity: number;
 }
 
@@ -37,75 +38,87 @@ type CartState = {
 };
 
 const cartReducer = (state: CartState, action: CartAction) => {
-  return state;
+  const index = state.cartItems.findIndex((item) => item.id, action.item.id);
+  const cartItems = state.cartItems.map((cartItem) => ({ ...cartItem }));
+
+  switch (action.type) {
+    case "addItem":
+      index > -1
+        ? cartItems[index].quantity++
+        : cartItems.push({ ...action.item, quantity: 1 });
+      break;
+    case "removeItem":
+      index > -1 && cartItems[index].quantity--;
+      break;
+  }
+
+  return { cartItems: cartItems.filter((item) => item.quantity > 0) };
 };
 
-export const useCartState = (menuCategories: Array<MenuCategoriesProps>) => {
-  const [menuCatalogue, setMenuCatalogue] = useState<Array<MenuItem>>([]);
+export const useCartState = () => {
   const [subTotal, setSubTotal] = useState(0);
   const [cart, dispatch] = useReducer(cartReducer, { cartItems: [] });
 
   useEffect(() => {
-    setMenuCatalogue(menuCategories.flatMap((category) => category.items));
-  }, [menuCategories]);
-
-  useEffect(() => {
     setSubTotal(
       cart.cartItems
-        .map(
-          (cartItem) =>
-            [
-              cartItem,
-              // corresponding menuItem should always exist in menuCatalogue ?
-              menuCatalogue.find((menuItem) => cartItem.id === menuItem.id),
-            ] as [CartItem, MenuItem]
-        )
-        .map(([cartItem, menuItem]) => cartItem.quantity * menuItem.price)
-        .reduce((total, current) => total + current)
+        .map((cartItem) => cartItem.price * cartItem.quantity)
+        .reduce((total, current) => total + current, 0)
     );
-  }, [menuCatalogue, cart]);
+  }, [cart]);
 
-  return { cart, subTotal, dipatchCartAction: dispatch };
+  return { cart, subTotal, dispatch: dispatch };
 };
 
 const Cart = ({
-  menuItems,
-  balance,
-  onAddMenuItem,
-  onRemoveMenuItem,
-}: CartProps & CartHandlers) =>
-  menuItems.length > 0 ? (
+  cart,
+  subTotal,
+  dispatch,
+}: {
+  cart: CartState;
+  subTotal: number;
+  dispatch: Dispatch<CartAction>;
+}) =>
+  cart.cartItems.length > 0 ? (
     <div className="cart">
       <button>Valider mon panier</button>
       <div className="cartItems">
-        {menuItems.map((menuItem) => (
-          <div key={menuItem.id} className="cartItem">
+        {cart.cartItems.map((cartItem) => (
+          <div key={cartItem.id} className="cartItem">
             <span>
-              <MinusButton onClick={() => onRemoveMenuItem(menuItem.id)} />
+              <MinusButton
+                onClick={() =>
+                  dispatch({ type: "removeItem", item: { ...cartItem } })
+                }
+              />
             </span>
-            <span>{menuItem.quantity}</span>
+            <span>{cartItem.quantity}</span>
             <span>
-              <PlusButton onClick={() => onAddMenuItem(menuItem.id)} />
+              <PlusButton
+                onClick={() =>
+                  dispatch({ type: "addItem", item: { ...cartItem } })
+                }
+              />
             </span>
-            <span>{menuItem.name}</span>
-            <span>{`${menuItem.price.toFixed(2)} €`}</span>
+            <span>{cartItem.name}</span>
+            <span>{`${cartItem.price.toFixed(2)} €`}</span>
           </div>
         ))}
       </div>
       <div className="cartResults">
         <div>
           <span>Sous-total</span>
-          <span>{`${balance.subTotal.toFixed(2)} €`}</span>
+          <span>{`${subTotal.toFixed(2)} €`}</span>
         </div>
         <div>
           <span>Frais de livraison</span>
-          <span>{`${balance.fee.toFixed(2)} €`}</span>
+          <span>{`2,50 €`}</span>
         </div>
       </div>
       <div className="cartTotal">
         <div>
           <span>Total</span>
-          <span>{`${balance.total.toFixed(2)} €`}</span>
+          <span>{`${(subTotal + 2.5).toFixed(2)} €`}</span>
         </div>
       </div>
     </div>

@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { ApiResponse } from "../api/backend";
+import { CartAction } from "./Cart";
 import "./MenuCategories.scss";
 
 export type MenuCategoriesProps = {
   name: string;
   items: Array<MenuItem>;
-  onItemClick?: (itemId: string) => void;
+  onItemClick?: Dispatch<CartAction>;
 };
 
 export type MenuItem = {
@@ -52,7 +53,7 @@ const MenuCategories = ({ name, items, onItemClick }: MenuCategoriesProps) =>
         <div
           key={index}
           className="menuItem"
-          onClick={() => onItemClick && onItemClick(item.id)}
+          onClick={() => onItemClick && onItemClick({ type: "addItem", item })}
         >
           <div>
             <h3>{item.name}</h3>
