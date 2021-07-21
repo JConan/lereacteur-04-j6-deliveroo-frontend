@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useBackendApi } from "./api/backend";
 import "./App.scss";
-import Cart, { CartProps } from "./components/Cart";
+import Cart, { CartProps, useCartState } from "./components/Cart";
 import Header, { useHeaderState } from "./components/Header";
 import MenuCategories, {
   MenuItem,
@@ -13,6 +13,8 @@ function App() {
 
   const header = useHeaderState(backendApiResponse);
   const menuCategories = useMenuCategoriesState(backendApiResponse);
+  //  const { cart, subTotal, dipatchCartAction } = useCartState(menuCategories);
+
   const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
 
   const [cart, setCart] = useState<CartProps>({

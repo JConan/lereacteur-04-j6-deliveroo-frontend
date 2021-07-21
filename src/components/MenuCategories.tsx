@@ -20,9 +20,9 @@ export type MenuItem = {
 export const useMenuCategoriesState = (
   backendApiResponse: ApiResponse | undefined
 ) => {
-  const [menuCategories, setMenuCategories] = useState<
-    MenuCategoriesProps[] | undefined
-  >(undefined);
+  const [menuCategories, setMenuCategories] = useState<MenuCategoriesProps[]>(
+    []
+  );
 
   useEffect(() => {
     backendApiResponse &&
