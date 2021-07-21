@@ -12,7 +12,7 @@ function App() {
   const backendApiResponse = useBackendApi();
 
   const header = useHeaderState(backendApiResponse);
-  const { menuCategories, setMenuCategories } = useMenuCategoriesState();
+  const menuCategories = useMenuCategoriesState(backendApiResponse);
   const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
 
   const [cart, setCart] = useState<CartProps>({
@@ -68,14 +68,6 @@ function App() {
 
     setCart(cartState);
   }, [menuSelectedItems, menuCategories]);
-
-  useEffect(() => {
-    (async () => {
-      if (backendApiResponse) {
-        setMenuCategories(backendApiResponse);
-      }
-    })();
-  }, [backendApiResponse]);
 
   const addMenuItem = (id: string) => {
     if (menuSelectedItems.indexOf(id) >= 0) {
