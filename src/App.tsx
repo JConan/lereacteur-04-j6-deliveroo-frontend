@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getRestaurantMenu } from "./api/backend";
+import { getRestaurantMenu, useBackendApi } from "./api/backend";
 import "./App.scss";
 import Cart, { CartProps } from "./components/Cart";
 import Header, { useHeaderState } from "./components/Header";
@@ -9,10 +9,11 @@ import MenuCategories, {
 } from "./components/MenuCategories";
 
 function App() {
-  const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
+  const backendApiResponse = useBackendApi();
 
   const { header, setHeader } = useHeaderState();
   const { menuCategories, setMenuCategories } = useMenuCategoriesState();
+  const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
 
   const [cart, setCart] = useState<CartProps>({
     menuItems: [],
@@ -70,12 +71,12 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const response = await getRestaurantMenu();
-      setHeader(response);
-      setMenuCategories(response);
+      if (backendApiResponse) {
+        setHeader(backendApiResponse);
+        setMenuCategories(backendApiResponse);
+      }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [backendApiResponse]);
 
   const addMenuItem = (id: string) => {
     if (menuSelectedItems.indexOf(id) >= 0) {
