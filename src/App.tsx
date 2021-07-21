@@ -26,7 +26,7 @@ function App() {
   useEffect(() => {
     const menuCatalogue =
       menuCategories
-        ?.map((menuCategory) => menuCategory.items)
+        ?.map((menuCategories) => menuCategories.items)
         .flatMap((items) => items) || [];
 
     const cartState: CartProps = menuSelectedItems
@@ -91,10 +91,10 @@ function App() {
       {header && <Header {...header} />}
       <div className="content">
         <div className="menu">
-          {menuCategories?.map((menuCategory, index) => (
+          {menuCategories?.map((menuCategories, index) => (
             <MenuCategories
               key={index}
-              {...menuCategory}
+              {...menuCategories}
               onItemClick={addMenuItem}
             />
           ))}

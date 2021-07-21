@@ -1,0 +1,71 @@
+@import "../variables";
+
+.App .menuCategories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .menuItem {
+    flex: 0 0 400px;
+    height: 160px;
+    background: #fff;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 25px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: space-between;
+    transition-duration: 0.3s;
+
+    > div {
+      flex: 1 0 225px;
+      margin-right: 15px;
+
+      > div {
+        display: flex;
+      }
+    }
+
+    h3 {
+      margin: 0;
+      margin-bottom: 8px;
+      font-weight: 400;
+    }
+
+    p {
+      color: #808484;
+      font-size: 0.9rem;
+      line-height: 1.3rem;
+      height: 2.6rem;
+      overflow: hidden;
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+
+    span {
+      font-size: 1.1rem;
+      color: #808484;
+    }
+
+    span:last-child {
+      color: #ff8000;
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      margin-left: 1rem;
+    }
+
+    img {
+      border-radius: 5px;
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+    }
+  }
+
+  .menuItem:hover {
+    box-shadow: 0 22px 24px 0 rgba(46, 51, 51, 0.07);
+  }
+}
