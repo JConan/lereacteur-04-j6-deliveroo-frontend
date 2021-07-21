@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getRestaurantMenu, useBackendApi } from "./api/backend";
+import { useBackendApi } from "./api/backend";
 import "./App.scss";
 import Cart, { CartProps } from "./components/Cart";
 import Header, { useHeaderState } from "./components/Header";
@@ -11,7 +11,7 @@ import MenuCategories, {
 function App() {
   const backendApiResponse = useBackendApi();
 
-  const { header, setHeader } = useHeaderState();
+  const header = useHeaderState(backendApiResponse);
   const { menuCategories, setMenuCategories } = useMenuCategoriesState();
   const [menuSelectedItems, setMenuSelectedItems] = useState<Array<string>>([]);
 
@@ -72,7 +72,6 @@ function App() {
   useEffect(() => {
     (async () => {
       if (backendApiResponse) {
-        setHeader(backendApiResponse);
         setMenuCategories(backendApiResponse);
       }
     })();
