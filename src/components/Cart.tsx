@@ -3,25 +3,6 @@ import { ReactComponent as MinusButton } from "../assets/images/minus.svg";
 import { ReactComponent as PlusButton } from "../assets/images/plus.svg";
 import { Dispatch, useEffect, useReducer, useState } from "react";
 
-export type CartProps = {
-  menuItems: Array<{
-    id: string;
-    name: string;
-    quantity: number;
-    price: number;
-  }>;
-  balance: {
-    subTotal: number;
-    fee: number;
-    total: number;
-  };
-};
-
-export type CartHandlers = {
-  onAddMenuItem: (id: string) => void;
-  onRemoveMenuItem: (id: string) => void;
-};
-
 export type CartAction =
   | { type: "addItem"; item: { id: string; name: string; price: number } }
   | { type: "removeItem"; item: { id: string } };
