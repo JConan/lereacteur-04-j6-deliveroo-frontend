@@ -19,7 +19,7 @@ type CartState = {
 };
 
 const cartReducer = (state: CartState, action: CartAction) => {
-  const index = state.cartItems.findIndex((item) => item.id, action.item.id);
+  const index = state.cartItems.findIndex((item) => item.id === action.item.id);
   const cartItems = state.cartItems.map((cartItem) => ({ ...cartItem }));
 
   switch (action.type) {
