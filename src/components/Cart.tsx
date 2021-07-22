@@ -36,7 +36,7 @@ const cartReducer = (state: CartState, action: CartAction) => {
   return { cartItems: cartItems.filter((item) => item.quantity > 0) };
 };
 
-export const useCartState = () => {
+export const useCartState = (): CartProps => {
   const [subTotal, setSubTotal] = useState(0);
   const [cart, dispatch] = useReducer(cartReducer, { cartItems: [] });
 
@@ -48,18 +48,16 @@ export const useCartState = () => {
     );
   }, [cart]);
 
-  return { cart, subTotal, dispatch: dispatch };
+  return { cart, subTotal, dispatch };
 };
 
-const Cart = ({
-  cart,
-  subTotal,
-  dispatch,
-}: {
+interface CartProps {
   cart: CartState;
   subTotal: number;
   dispatch: Dispatch<CartAction>;
-}) =>
+}
+
+const Cart = ({ cart, subTotal, dispatch }: CartProps) =>
   cart.cartItems.length > 0 ? (
     <div className="cart">
       <button>Valider mon panier</button>
