@@ -14,8 +14,6 @@ function App() {
   const menuCategories = useMenuCategoriesState(backendApiResponse);
   const cartState = useCartState();
 
-  const spin = true;
-
   return (
     <div className="App">
       {backendApiResponse && header ? (
